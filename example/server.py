@@ -8,11 +8,22 @@ app = Sanic(__name__)
 
 config = Config(config={'sampler': {'type': 'const', 'param': 1},
                         'logging': True,
-                        'local_agent':{'reporting_host': JAEGER_HOST}},
+                        'local_agent': {'reporting_host': JAEGER_HOST}},
                 service_name="jaeger_opentracing_example")
 jaeger_tracer = config.initialize_tracer()
 
-_tracing = tracing.SanicOpenTracer(tracer=jaeger_tracer, trace_all_requests=False)
+
+@app.route("/ep1")
+async def ep1(request):
+    return "ep1"
+
+
+@app.route("/ep2")
+async def ep2(request):
+    return "ep2"
+
+
+_tracing = tracing.SanicOpenTracer(tracer=jaeger_tracer, trace_all_requests=True, app=app)
 
 
 @app.route('/log')
