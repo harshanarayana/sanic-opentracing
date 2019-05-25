@@ -1,0 +1,4 @@
+opentracing
+sanic
+jaeger-client
+requests-async
